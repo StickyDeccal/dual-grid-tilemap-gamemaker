@@ -80,6 +80,8 @@ for(var i = 1; i < 4; ++i)
 		var tData = tPos[0] + tPos[1]*16;
 		if(i = 1) var l = q1; else if(i = 2) var l = q2; else if(i = 3) var l = q3;
 		tilemap_set_at_pixel(layer_tilemap_get_id(l),tData,pos[0]+1,pos[1]+1);
+		
+		show_debug_message("Attempting to log missing tile at: (" + string(pos[0]) + ", " + string(pos[1]) + ")");
 	}
 }
 
@@ -99,4 +101,6 @@ function setDisplayTile(pos) {
 	var tilePos = calculateDisplayTile(pos);
 	var tileData = tilePos[0] + tilePos[1]*16;
 	tilemap_set_at_pixel(displayTilemap,tileData,pos[0]+1,pos[1]+1)
+
+	 
 }

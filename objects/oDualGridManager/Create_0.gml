@@ -5,6 +5,7 @@ displayTilemapString = "DisplayTiles";
 global.refreshTilemap = false; //global for easy access
 
 //enumarate from bottom to top layer
+
 enum TileType {
 	None,
 	Water,
@@ -13,176 +14,433 @@ enum TileType {
 	PavedGrass
 }
 
+#macro NONE TileType.None
+#macro WATER TileType.Water
+#macro DIRT TileType.Dirt
+#macro GRASS TileType.Grass
+#macro PAVED TileType.PavedGrass
+
+//map for tile types, returning the inputs into given format of ds_map_add
+function map_add(material1, material2, material3, material4, x, y) {
+	var key = string(material1) + string(material2) + string(material3) + string(material4);
+	ds_map_add(neighboursToTile, key, [x, y]);
+}
+
 
 //into flat string
 neighboursToTile = ds_map_create();
 //dirt+none
-ds_map_add(neighboursToTile, string(TileType.None)	+string(TileType.None)	+string(TileType.None)	+string(TileType.None)	, [0,0]);
-ds_map_add(neighboursToTile, string(TileType.None)	+string(TileType.None)	+string(TileType.None)	+string(TileType.Dirt)	, [1,0]);
-ds_map_add(neighboursToTile, string(TileType.None)	+string(TileType.Dirt)	+string(TileType.Dirt)	+string(TileType.None)	, [2,0]);
-ds_map_add(neighboursToTile, string(TileType.Dirt)	+string(TileType.None)	+string(TileType.None)	+string(TileType.None)	, [3,0]);
-ds_map_add(neighboursToTile, string(TileType.None)	+string(TileType.None)	+string(TileType.Dirt)	+string(TileType.None)	, [0,1]);
-ds_map_add(neighboursToTile, string(TileType.None)	+string(TileType.Dirt)	+string(TileType.None)	+string(TileType.Dirt)	, [1,1]);
-ds_map_add(neighboursToTile, string(TileType.Dirt)	+string(TileType.None)	+string(TileType.Dirt)	+string(TileType.Dirt)	, [2,1]);
-ds_map_add(neighboursToTile, string(TileType.None)	+string(TileType.None)	+string(TileType.Dirt)	+string(TileType.Dirt)	, [3,1]);
-ds_map_add(neighboursToTile, string(TileType.Dirt)	+string(TileType.None)	+string(TileType.None)	+string(TileType.Dirt)	, [0,2]);
-ds_map_add(neighboursToTile, string(TileType.None)	+string(TileType.Dirt)	+string(TileType.Dirt)	+string(TileType.Dirt)	, [1,2]);
-ds_map_add(neighboursToTile, string(TileType.Dirt)	+string(TileType.Dirt)	+string(TileType.Dirt)	+string(TileType.Dirt)	, [2,2]);
-ds_map_add(neighboursToTile, string(TileType.Dirt)	+string(TileType.Dirt)	+string(TileType.Dirt)	+string(TileType.None)	, [3,2]);
-ds_map_add(neighboursToTile, string(TileType.None)	+string(TileType.Dirt)	+string(TileType.None)	+string(TileType.None)	, [0,3]);
-ds_map_add(neighboursToTile, string(TileType.Dirt)	+string(TileType.Dirt)	+string(TileType.None)	+string(TileType.None)	, [1,3]);
-ds_map_add(neighboursToTile, string(TileType.Dirt)	+string(TileType.Dirt)	+string(TileType.None)	+string(TileType.Dirt)	, [2,3]);
-ds_map_add(neighboursToTile, string(TileType.Dirt)	+string(TileType.None)	+string(TileType.Dirt)	+string(TileType.None)	, [3,3]);
+map_add(NONE,NONE,NONE,NONE,0,0);
+map_add(NONE,NONE,NONE,DIRT,1,0);
+map_add(NONE,DIRT,DIRT,NONE,2,0);
+map_add(DIRT,NONE,NONE,NONE,3,0);
+map_add(NONE,NONE,DIRT,NONE,0,1);
+map_add(NONE,DIRT,NONE,DIRT,1,1);
+map_add(DIRT,NONE,DIRT,DIRT,2,1);
+map_add(NONE,NONE,DIRT,DIRT,3,1);
+map_add(DIRT,NONE,NONE,DIRT,0,2);
+map_add(NONE,DIRT,DIRT,DIRT,1,2);
+map_add(DIRT,DIRT,DIRT,DIRT,2,2);
+map_add(DIRT,DIRT,DIRT,NONE,3,2);
+map_add(NONE,DIRT,NONE,NONE,0,3);
+map_add(DIRT,DIRT,NONE,NONE,1,3);
+map_add(DIRT,DIRT,NONE,DIRT,2,3);
+map_add(DIRT,NONE,DIRT,NONE,3,3);
 //dirt+water
-ds_map_add(neighboursToTile, string(TileType.Water)	+string(TileType.Water)	+string(TileType.Water)	+string(TileType.Water)	, [4,0]);
-ds_map_add(neighboursToTile, string(TileType.Water)	+string(TileType.Water)	+string(TileType.Water)	+string(TileType.Dirt)	, [5,0]);
-ds_map_add(neighboursToTile, string(TileType.Water)	+string(TileType.Dirt)	+string(TileType.Dirt)	+string(TileType.Water)	, [6,0]);
-ds_map_add(neighboursToTile, string(TileType.Dirt)	+string(TileType.Water)	+string(TileType.Water)	+string(TileType.Water)	, [7,0]);
-ds_map_add(neighboursToTile, string(TileType.Water)	+string(TileType.Water)	+string(TileType.Dirt)	+string(TileType.Water)	, [4,1]);
-ds_map_add(neighboursToTile, string(TileType.Water)	+string(TileType.Dirt)	+string(TileType.Water)	+string(TileType.Dirt)	, [5,1]);
-ds_map_add(neighboursToTile, string(TileType.Dirt)	+string(TileType.Water)	+string(TileType.Dirt)	+string(TileType.Dirt)	, [6,1]);
-ds_map_add(neighboursToTile, string(TileType.Water)	+string(TileType.Water)	+string(TileType.Dirt)	+string(TileType.Dirt)	, [7,1]);
-ds_map_add(neighboursToTile, string(TileType.Dirt)	+string(TileType.Water)	+string(TileType.Water)	+string(TileType.Dirt)	, [4,2]);
-ds_map_add(neighboursToTile, string(TileType.Water)	+string(TileType.Dirt)	+string(TileType.Dirt)	+string(TileType.Dirt)	, [5,2]);
-ds_map_add(neighboursToTile, string(TileType.Dirt)	+string(TileType.Dirt)	+string(TileType.Dirt)	+string(TileType.Dirt)	, [6,2]);
-ds_map_add(neighboursToTile, string(TileType.Dirt)	+string(TileType.Dirt)	+string(TileType.Dirt)	+string(TileType.Water)	, [7,2]);
-ds_map_add(neighboursToTile, string(TileType.Water)	+string(TileType.Dirt)	+string(TileType.Water)	+string(TileType.Water)	, [4,3]);
-ds_map_add(neighboursToTile, string(TileType.Dirt)	+string(TileType.Dirt)	+string(TileType.Water)	+string(TileType.Water)	, [5,3]);
-ds_map_add(neighboursToTile, string(TileType.Dirt)	+string(TileType.Dirt)	+string(TileType.Water)	+string(TileType.Dirt)	, [6,3]);
-ds_map_add(neighboursToTile, string(TileType.Dirt)	+string(TileType.Water)	+string(TileType.Dirt)	+string(TileType.Water)	, [7,3]);
+map_add(WATER,WATER,WATER,WATER,4,0);
+map_add(WATER,WATER,WATER,DIRT,5,0);
+map_add(WATER,DIRT,DIRT,WATER,6,0);
+map_add(DIRT,WATER,WATER,WATER,7,0);
+map_add(WATER,WATER,DIRT,WATER,4,1);
+map_add(WATER,DIRT,WATER,DIRT,5,1);
+map_add(DIRT,WATER,DIRT,DIRT,6,1);
+map_add(WATER,WATER,DIRT,DIRT,7,1);
+map_add(DIRT,WATER,WATER,DIRT,4,2);
+map_add(WATER,DIRT,DIRT,DIRT,5,2);
+map_add(DIRT,DIRT,DIRT,DIRT,6,2);
+map_add(DIRT,DIRT,DIRT,WATER,7,2);
+map_add(WATER,DIRT,WATER,WATER,4,3);
+map_add(DIRT,DIRT,WATER,WATER,5,3);
+map_add(DIRT,DIRT,WATER,DIRT,6,3);
+map_add(DIRT,WATER,DIRT,WATER,7,3);
 //grass+none
 //ds_map_add(neighboursToTile, string(TileType.None)	+string(TileType.None)	+string(TileType.None)	+string(TileType.None)	, [0,0]);
-ds_map_add(neighboursToTile, string(TileType.None)	+string(TileType.None)	+string(TileType.None)	+string(TileType.Grass)	, [1,4]);
-ds_map_add(neighboursToTile, string(TileType.None)	+string(TileType.Grass)	+string(TileType.Grass)	+string(TileType.None)	, [2,4]);
-ds_map_add(neighboursToTile, string(TileType.Grass)	+string(TileType.None)	+string(TileType.None)	+string(TileType.None)	, [3,4]);
-ds_map_add(neighboursToTile, string(TileType.None)	+string(TileType.None)	+string(TileType.Grass)	+string(TileType.None)	, [0,5]);
-ds_map_add(neighboursToTile, string(TileType.None)	+string(TileType.Grass)	+string(TileType.None)	+string(TileType.Grass)	, [1,5]);
-ds_map_add(neighboursToTile, string(TileType.Grass)	+string(TileType.None)	+string(TileType.Grass)	+string(TileType.Grass)	, [2,5]);
-ds_map_add(neighboursToTile, string(TileType.None)	+string(TileType.None)	+string(TileType.Grass)	+string(TileType.Grass)	, [3,5]);
-ds_map_add(neighboursToTile, string(TileType.Grass)	+string(TileType.None)	+string(TileType.None)	+string(TileType.Grass)	, [0,6]);
-ds_map_add(neighboursToTile, string(TileType.None)	+string(TileType.Grass)	+string(TileType.Grass)	+string(TileType.Grass)	, [1,6]);
-ds_map_add(neighboursToTile, string(TileType.Grass)	+string(TileType.Grass)	+string(TileType.Grass)	+string(TileType.Grass)	, [2,6]);
-ds_map_add(neighboursToTile, string(TileType.Grass)	+string(TileType.Grass)	+string(TileType.Grass)	+string(TileType.None)	, [3,6]);
-ds_map_add(neighboursToTile, string(TileType.None)	+string(TileType.Grass)	+string(TileType.None)	+string(TileType.None)	, [0,7]);
-ds_map_add(neighboursToTile, string(TileType.Grass)	+string(TileType.Grass)	+string(TileType.None)	+string(TileType.None)	, [1,7]);
-ds_map_add(neighboursToTile, string(TileType.Grass)	+string(TileType.Grass)	+string(TileType.None)	+string(TileType.Grass)	, [2,7]);
-ds_map_add(neighboursToTile, string(TileType.Grass)	+string(TileType.None)	+string(TileType.Grass)	+string(TileType.None)	, [3,7]);
+map_add(NONE,NONE,NONE,GRASS,1,4);
+map_add(NONE,GRASS,GRASS,NONE,2,4);
+map_add(GRASS,NONE,NONE,NONE,3,4);
+map_add(NONE,NONE,GRASS,NONE,0,5);
+map_add(NONE,GRASS,NONE,GRASS,1,5);
+map_add(GRASS,NONE,GRASS,GRASS,2,5);
+map_add(NONE,NONE,GRASS,GRASS,3,5);
+map_add(GRASS,NONE,NONE,GRASS,0,6);
+map_add(NONE,GRASS,GRASS,GRASS,1,6);
+map_add(GRASS,GRASS,GRASS,GRASS,2,6);
+map_add(GRASS,GRASS,GRASS,NONE,3,6);
+map_add(NONE,GRASS,NONE,NONE,0,7);
+map_add(GRASS,GRASS,NONE,NONE,1,7);
+map_add(GRASS,GRASS,NONE,GRASS,2,7);
+map_add(GRASS,NONE,GRASS,NONE,3,7);
 //grass+dirt
-ds_map_add(neighboursToTile, string(TileType.Dirt)	+string(TileType.Dirt)	+string(TileType.Dirt)	+string(TileType.Dirt)	, [4,4]);
-ds_map_add(neighboursToTile, string(TileType.Dirt)	+string(TileType.Dirt)	+string(TileType.Dirt)	+string(TileType.Grass)	, [5,4]);
-ds_map_add(neighboursToTile, string(TileType.Dirt)	+string(TileType.Grass)	+string(TileType.Grass)	+string(TileType.Dirt)	, [6,4]);
-ds_map_add(neighboursToTile, string(TileType.Grass)	+string(TileType.Dirt)	+string(TileType.Dirt)	+string(TileType.Dirt)	, [7,4]);
-ds_map_add(neighboursToTile, string(TileType.Dirt)	+string(TileType.Dirt)	+string(TileType.Grass)	+string(TileType.Dirt)	, [4,5]);
-ds_map_add(neighboursToTile, string(TileType.Dirt)	+string(TileType.Grass)	+string(TileType.Dirt)	+string(TileType.Grass)	, [5,5]);
-ds_map_add(neighboursToTile, string(TileType.Grass)	+string(TileType.Dirt)	+string(TileType.Grass)	+string(TileType.Grass)	, [6,5]);
-ds_map_add(neighboursToTile, string(TileType.Dirt)	+string(TileType.Dirt)	+string(TileType.Grass)	+string(TileType.Grass)	, [7,5]);
-ds_map_add(neighboursToTile, string(TileType.Grass)	+string(TileType.Dirt)	+string(TileType.Dirt)	+string(TileType.Grass)	, [4,6]);
-ds_map_add(neighboursToTile, string(TileType.Dirt)	+string(TileType.Grass)	+string(TileType.Grass)	+string(TileType.Grass)	, [5,6]);
-ds_map_add(neighboursToTile, string(TileType.Grass)	+string(TileType.Grass)	+string(TileType.Grass)	+string(TileType.Grass)	, [6,6]);
-ds_map_add(neighboursToTile, string(TileType.Grass)	+string(TileType.Grass)	+string(TileType.Grass)	+string(TileType.Dirt)	, [7,6]);
-ds_map_add(neighboursToTile, string(TileType.Dirt)	+string(TileType.Grass)	+string(TileType.Dirt)	+string(TileType.Dirt)	, [4,7]);
-ds_map_add(neighboursToTile, string(TileType.Grass)	+string(TileType.Grass)	+string(TileType.Dirt)	+string(TileType.Dirt)	, [5,7]);
-ds_map_add(neighboursToTile, string(TileType.Grass)	+string(TileType.Grass)	+string(TileType.Dirt)	+string(TileType.Grass)	, [6,7]);
-ds_map_add(neighboursToTile, string(TileType.Grass)	+string(TileType.Dirt)	+string(TileType.Grass)	+string(TileType.Dirt)	, [7,7]);
+map_add(DIRT,DIRT,DIRT,DIRT,4,4);
+map_add(DIRT,DIRT,DIRT,GRASS,5,4);
+map_add(DIRT,GRASS,GRASS,DIRT,6,4);
+map_add(GRASS,DIRT,DIRT,DIRT,7,4);
+map_add(DIRT,DIRT,GRASS,DIRT,4,5);
+map_add(DIRT,GRASS,DIRT,GRASS,5,5);
+map_add(GRASS,DIRT,GRASS,GRASS,6,5);
+map_add(DIRT,DIRT,GRASS,GRASS,7,5);
+map_add(GRASS,DIRT,DIRT,GRASS,4,6);
+map_add(DIRT,GRASS,GRASS,GRASS,5,6);
+map_add(GRASS,GRASS,GRASS,GRASS,6,6);
+map_add(GRASS,GRASS,GRASS,DIRT,7,6);
+map_add(DIRT,GRASS,DIRT,DIRT,4,7);
+map_add(GRASS,GRASS,DIRT,DIRT,5,7);
+map_add(GRASS,GRASS,DIRT,GRASS,6,7);
+map_add(GRASS,DIRT,GRASS,DIRT,7,7);
 //grass+water
-ds_map_add(neighboursToTile, string(TileType.Water)	+string(TileType.Water)	+string(TileType.Water)	+string(TileType.Water)	, [8,4]);
-ds_map_add(neighboursToTile, string(TileType.Water)	+string(TileType.Water)	+string(TileType.Water)	+string(TileType.Grass)	, [9,4]);
-ds_map_add(neighboursToTile, string(TileType.Water)	+string(TileType.Grass)	+string(TileType.Grass)	+string(TileType.Water)	, [10,4]);
-ds_map_add(neighboursToTile, string(TileType.Grass)	+string(TileType.Water)	+string(TileType.Water)	+string(TileType.Water)	, [11,4]);
-ds_map_add(neighboursToTile, string(TileType.Water)	+string(TileType.Water)	+string(TileType.Grass)	+string(TileType.Water)	, [8,5]);
-ds_map_add(neighboursToTile, string(TileType.Water)	+string(TileType.Grass)	+string(TileType.Water)	+string(TileType.Grass)	, [9,5]);
-ds_map_add(neighboursToTile, string(TileType.Grass)	+string(TileType.Water)	+string(TileType.Grass)	+string(TileType.Grass)	, [10,5]);
-ds_map_add(neighboursToTile, string(TileType.Water)	+string(TileType.Water)	+string(TileType.Grass)	+string(TileType.Grass)	, [11,5]);
-ds_map_add(neighboursToTile, string(TileType.Grass)	+string(TileType.Water)	+string(TileType.Water)	+string(TileType.Grass)	, [8,6]);
-ds_map_add(neighboursToTile, string(TileType.Water)	+string(TileType.Grass)	+string(TileType.Grass)	+string(TileType.Grass)	, [9,6]);
-ds_map_add(neighboursToTile, string(TileType.Grass)	+string(TileType.Grass)	+string(TileType.Grass)	+string(TileType.Grass)	, [10,6]);
-ds_map_add(neighboursToTile, string(TileType.Grass)	+string(TileType.Grass)	+string(TileType.Grass)	+string(TileType.Water)	, [11,6]);
-ds_map_add(neighboursToTile, string(TileType.Water)	+string(TileType.Grass)	+string(TileType.Water)	+string(TileType.Water)	, [8,7]);
-ds_map_add(neighboursToTile, string(TileType.Grass)	+string(TileType.Grass)	+string(TileType.Water)	+string(TileType.Water)	, [9,7]);
-ds_map_add(neighboursToTile, string(TileType.Grass)	+string(TileType.Grass)	+string(TileType.Water)	+string(TileType.Grass)	, [10,7]);
-ds_map_add(neighboursToTile, string(TileType.Grass)	+string(TileType.Water)	+string(TileType.Grass)	+string(TileType.Water)	, [11,7]);
+map_add(WATER,WATER,WATER,WATER,8,4);
+map_add(WATER,WATER,WATER,GRASS,9,4);
+map_add(WATER,GRASS,GRASS,WATER,10,4);
+map_add(GRASS,WATER,WATER,WATER,11,4);
+map_add(WATER,WATER,GRASS,WATER,8,5);
+map_add(WATER,GRASS,WATER,GRASS,9,5);
+map_add(GRASS,WATER,GRASS,GRASS,10,5);
+map_add(WATER,WATER,GRASS,GRASS,11,5);
+map_add(GRASS,WATER,WATER,GRASS,8,6);
+map_add(WATER,GRASS,GRASS,GRASS,9,6);
+map_add(GRASS,GRASS,GRASS,GRASS,10,6);
+map_add(GRASS,GRASS,GRASS,WATER,11,6);
+map_add(WATER,GRASS,WATER,WATER,8,7);
+map_add(GRASS,GRASS,WATER,WATER,9,7);
+map_add(GRASS,GRASS,WATER,GRASS,10,7);
+map_add(GRASS,WATER,GRASS,WATER,11,7);
 //pavedGrass+none
-//ds_map_add(neighboursToTile, string(TileType.None)			+string(TileType.None)			+string(TileType.None)			+string(TileType.None)			, [0,8]);
-ds_map_add(neighboursToTile, string(TileType.None)			+string(TileType.None)			+string(TileType.None)			+string(TileType.PavedGrass)	, [1,8]);
-ds_map_add(neighboursToTile, string(TileType.None)			+string(TileType.PavedGrass)	+string(TileType.PavedGrass)	+string(TileType.None)			, [2,8]);
-ds_map_add(neighboursToTile, string(TileType.PavedGrass)	+string(TileType.None)			+string(TileType.None)			+string(TileType.None)			, [3,8]);
-ds_map_add(neighboursToTile, string(TileType.None)			+string(TileType.None)			+string(TileType.PavedGrass)	+string(TileType.None)			, [0,9]);
-ds_map_add(neighboursToTile, string(TileType.None)			+string(TileType.PavedGrass)	+string(TileType.None)			+string(TileType.PavedGrass)	, [1,9]);
-ds_map_add(neighboursToTile, string(TileType.PavedGrass)	+string(TileType.None)			+string(TileType.PavedGrass)	+string(TileType.PavedGrass)	, [2,9]);
-ds_map_add(neighboursToTile, string(TileType.None)			+string(TileType.None)			+string(TileType.PavedGrass)	+string(TileType.PavedGrass)	, [3,9]);
-ds_map_add(neighboursToTile, string(TileType.PavedGrass)	+string(TileType.None)			+string(TileType.None)			+string(TileType.PavedGrass)	, [0,10]);
-ds_map_add(neighboursToTile, string(TileType.None)			+string(TileType.PavedGrass)	+string(TileType.PavedGrass)	+string(TileType.PavedGrass)	, [1,10]);
-ds_map_add(neighboursToTile, string(TileType.PavedGrass)	+string(TileType.PavedGrass)	+string(TileType.PavedGrass)	+string(TileType.PavedGrass)	, [2,10]);
-ds_map_add(neighboursToTile, string(TileType.PavedGrass)	+string(TileType.PavedGrass)	+string(TileType.PavedGrass)	+string(TileType.None)			, [3,10]);
-ds_map_add(neighboursToTile, string(TileType.None)			+string(TileType.PavedGrass)	+string(TileType.None)			+string(TileType.None)			, [0,11]);
-ds_map_add(neighboursToTile, string(TileType.PavedGrass)	+string(TileType.PavedGrass)	+string(TileType.None)			+string(TileType.None)			, [1,11]);
-ds_map_add(neighboursToTile, string(TileType.PavedGrass)	+string(TileType.PavedGrass)	+string(TileType.None)			+string(TileType.PavedGrass)	, [2,11]);
-ds_map_add(neighboursToTile, string(TileType.PavedGrass)	+string(TileType.None)			+string(TileType.PavedGrass)	+string(TileType.None)			, [3,11]);
+//ds_map_add(neighboursToTile, string(TileType.None)	+string(TileType.None)	+string(TileType.None)	+string(TileType.None)	, [0,8]);
+map_add(NONE,NONE,NONE,PAVED,1,8);
+map_add(NONE,PAVED,PAVED,NONE,2,8);
+map_add(PAVED,NONE,NONE,NONE,3,8);
+map_add(NONE,NONE,PAVED,NONE,0,9);
+map_add(NONE,PAVED,NONE,PAVED,1,9);
+map_add(PAVED,NONE,PAVED,PAVED,2,9);
+map_add(NONE,NONE,PAVED,PAVED,3,9);
+map_add(PAVED,NONE,NONE,PAVED,0,10);
+map_add(NONE,PAVED,PAVED,PAVED,1,10);
+map_add(PAVED,PAVED,PAVED,PAVED,2,10);
+map_add(PAVED,PAVED,PAVED,NONE,3,10);
+map_add(NONE,PAVED,NONE,NONE,0,11);
+map_add(PAVED,PAVED,NONE,NONE,1,11);
+map_add(PAVED,PAVED,NONE,PAVED,2,11);
+map_add(PAVED,NONE,PAVED,NONE,3,11);
 //pavedGrass+grass
-ds_map_add(neighboursToTile, string(TileType.Grass)			+string(TileType.Grass)			+string(TileType.Grass)			+string(TileType.Grass)			, [4,8]);
-ds_map_add(neighboursToTile, string(TileType.Grass)			+string(TileType.Grass)			+string(TileType.Grass)			+string(TileType.PavedGrass)	, [5,8]);
-ds_map_add(neighboursToTile, string(TileType.Grass)			+string(TileType.PavedGrass)	+string(TileType.PavedGrass)	+string(TileType.Grass)			, [6,8]);
-ds_map_add(neighboursToTile, string(TileType.PavedGrass)	+string(TileType.Grass)			+string(TileType.Grass)			+string(TileType.Grass)			, [7,8]);
-ds_map_add(neighboursToTile, string(TileType.Grass)			+string(TileType.Grass)			+string(TileType.PavedGrass)	+string(TileType.Grass)			, [4,9]);
-ds_map_add(neighboursToTile, string(TileType.Grass)			+string(TileType.PavedGrass)	+string(TileType.Grass)			+string(TileType.PavedGrass)	, [5,9]);
-ds_map_add(neighboursToTile, string(TileType.PavedGrass)	+string(TileType.Grass)			+string(TileType.PavedGrass)	+string(TileType.PavedGrass)	, [6,9]);
-ds_map_add(neighboursToTile, string(TileType.Grass)			+string(TileType.Grass)			+string(TileType.PavedGrass)	+string(TileType.PavedGrass)	, [7,9]);
-ds_map_add(neighboursToTile, string(TileType.PavedGrass)	+string(TileType.Grass)			+string(TileType.Grass)			+string(TileType.PavedGrass)	, [4,10]);
-ds_map_add(neighboursToTile, string(TileType.Grass)			+string(TileType.PavedGrass)	+string(TileType.PavedGrass)	+string(TileType.PavedGrass)	, [5,10]);
-ds_map_add(neighboursToTile, string(TileType.PavedGrass)	+string(TileType.PavedGrass)	+string(TileType.PavedGrass)	+string(TileType.PavedGrass)	, [6,10]);
-ds_map_add(neighboursToTile, string(TileType.PavedGrass)	+string(TileType.PavedGrass)	+string(TileType.PavedGrass)	+string(TileType.Grass)			, [7,10]);
-ds_map_add(neighboursToTile, string(TileType.Grass)			+string(TileType.PavedGrass)	+string(TileType.Grass)			+string(TileType.Grass)			, [4,11]);
-ds_map_add(neighboursToTile, string(TileType.PavedGrass)	+string(TileType.PavedGrass)	+string(TileType.Grass)			+string(TileType.Grass)			, [5,11]);
-ds_map_add(neighboursToTile, string(TileType.PavedGrass)	+string(TileType.PavedGrass)	+string(TileType.Grass)			+string(TileType.PavedGrass)	, [6,11]);
-ds_map_add(neighboursToTile, string(TileType.PavedGrass)	+string(TileType.Grass)			+string(TileType.PavedGrass)	+string(TileType.Grass)			, [7,11]);
+map_add(GRASS,GRASS,GRASS,GRASS,4,8);
+map_add(GRASS,GRASS,GRASS,PAVED,5,8);
+map_add(GRASS,PAVED,PAVED,GRASS,6,8);
+map_add(PAVED,GRASS,GRASS,GRASS,7,8);
+map_add(GRASS,GRASS,PAVED,GRASS,4,9);
+map_add(GRASS,PAVED,GRASS,PAVED,5,9);
+map_add(PAVED,GRASS,PAVED,PAVED,6,9);
+map_add(GRASS,GRASS,PAVED,PAVED,7,9);
+map_add(PAVED,GRASS,GRASS,PAVED,4,10);
+map_add(GRASS,PAVED,PAVED,PAVED,5,10);
+map_add(PAVED,PAVED,PAVED,PAVED,6,10);
+map_add(PAVED,PAVED,PAVED,GRASS,7,10);
+map_add(GRASS,PAVED,GRASS,GRASS,4,11);
+map_add(PAVED,PAVED,GRASS,GRASS,5,11);
+map_add(PAVED,PAVED,GRASS,PAVED,6,11);
+map_add(PAVED,GRASS,PAVED,GRASS,7,11);
 //pavedGrass+dirt
-ds_map_add(neighboursToTile, string(TileType.Dirt)			+string(TileType.Dirt)			+string(TileType.Dirt)			+string(TileType.Dirt)			, [8,8]);
-ds_map_add(neighboursToTile, string(TileType.Dirt)			+string(TileType.Dirt)			+string(TileType.Dirt)			+string(TileType.PavedGrass)	, [9,8]);
-ds_map_add(neighboursToTile, string(TileType.Dirt)			+string(TileType.PavedGrass)	+string(TileType.PavedGrass)	+string(TileType.Dirt)			, [10,8]);
-ds_map_add(neighboursToTile, string(TileType.PavedGrass)	+string(TileType.Dirt)			+string(TileType.Dirt)			+string(TileType.Dirt)			, [11,8]);
-ds_map_add(neighboursToTile, string(TileType.Dirt)			+string(TileType.Dirt)			+string(TileType.PavedGrass)	+string(TileType.Dirt)			, [8,9]);
-ds_map_add(neighboursToTile, string(TileType.Dirt)			+string(TileType.PavedGrass)	+string(TileType.Dirt)			+string(TileType.PavedGrass)	, [9,9]);
-ds_map_add(neighboursToTile, string(TileType.PavedGrass)	+string(TileType.Dirt)			+string(TileType.PavedGrass)	+string(TileType.PavedGrass)	, [10,9]);
-ds_map_add(neighboursToTile, string(TileType.Dirt)			+string(TileType.Dirt)			+string(TileType.PavedGrass)	+string(TileType.PavedGrass)	, [11,9]);
-ds_map_add(neighboursToTile, string(TileType.PavedGrass)	+string(TileType.Dirt)			+string(TileType.Dirt)			+string(TileType.PavedGrass)	, [8,10]);
-ds_map_add(neighboursToTile, string(TileType.Dirt)			+string(TileType.PavedGrass)	+string(TileType.PavedGrass)	+string(TileType.PavedGrass)	, [9,10]);
-ds_map_add(neighboursToTile, string(TileType.PavedGrass)	+string(TileType.PavedGrass)	+string(TileType.PavedGrass)	+string(TileType.PavedGrass)	, [10,10]);
-ds_map_add(neighboursToTile, string(TileType.PavedGrass)	+string(TileType.PavedGrass)	+string(TileType.PavedGrass)	+string(TileType.Dirt)			, [11,10]);
-ds_map_add(neighboursToTile, string(TileType.Dirt)			+string(TileType.PavedGrass)	+string(TileType.Dirt)			+string(TileType.Dirt)			, [8,11]);
-ds_map_add(neighboursToTile, string(TileType.PavedGrass)	+string(TileType.PavedGrass)	+string(TileType.Dirt)			+string(TileType.Dirt)			, [9,11]);
-ds_map_add(neighboursToTile, string(TileType.PavedGrass)	+string(TileType.PavedGrass)	+string(TileType.Dirt)			+string(TileType.PavedGrass)	, [10,11]);
-ds_map_add(neighboursToTile, string(TileType.PavedGrass)	+string(TileType.Dirt)			+string(TileType.PavedGrass)	+string(TileType.Dirt)			, [11,11]);
+map_add(DIRT,DIRT,DIRT,DIRT,8,8);
+map_add(DIRT,DIRT,DIRT,PAVED,9,8);
+map_add(DIRT,PAVED,PAVED,DIRT,10,8);
+map_add(PAVED,DIRT,DIRT,DIRT,11,8);
+map_add(DIRT,DIRT,PAVED,DIRT,8,9);
+map_add(DIRT,PAVED,DIRT,PAVED,9,9);
+map_add(PAVED,DIRT,PAVED,PAVED,10,9);
+map_add(DIRT,DIRT,PAVED,PAVED,11,9);
+map_add(PAVED,DIRT,DIRT,PAVED,8,10);
+map_add(DIRT,PAVED,PAVED,PAVED,9,10);
+map_add(PAVED,PAVED,PAVED,PAVED,10,10);
+map_add(PAVED,PAVED,PAVED,DIRT,11,10);
+map_add(DIRT,PAVED,DIRT,DIRT,8,11);
+map_add(PAVED,PAVED,DIRT,DIRT,9,11);
+map_add(PAVED,PAVED,DIRT,PAVED,10,11);
+map_add(PAVED,DIRT,PAVED,DIRT,11,11);
 //pavedGrass+water
-ds_map_add(neighboursToTile, string(TileType.Water)			+string(TileType.Water)			+string(TileType.Water)			+string(TileType.Water)			, [12,8]);
-ds_map_add(neighboursToTile, string(TileType.Water)			+string(TileType.Water)			+string(TileType.Water)			+string(TileType.PavedGrass)	, [13,8]);
-ds_map_add(neighboursToTile, string(TileType.Water)			+string(TileType.PavedGrass)	+string(TileType.PavedGrass)	+string(TileType.Water)			, [14,8]);
-ds_map_add(neighboursToTile, string(TileType.PavedGrass)	+string(TileType.Water)			+string(TileType.Water)			+string(TileType.Water)			, [15,8]);
-ds_map_add(neighboursToTile, string(TileType.Water)			+string(TileType.Water)			+string(TileType.PavedGrass)	+string(TileType.Water)			, [12,9]);
-ds_map_add(neighboursToTile, string(TileType.Water)			+string(TileType.PavedGrass)	+string(TileType.Water)			+string(TileType.PavedGrass)	, [13,9]);
-ds_map_add(neighboursToTile, string(TileType.PavedGrass)	+string(TileType.Water)			+string(TileType.PavedGrass)	+string(TileType.PavedGrass)	, [14,9]);
-ds_map_add(neighboursToTile, string(TileType.Water)			+string(TileType.Water)			+string(TileType.PavedGrass)	+string(TileType.PavedGrass)	, [15,9]);
-ds_map_add(neighboursToTile, string(TileType.PavedGrass)	+string(TileType.Water)			+string(TileType.Water)			+string(TileType.PavedGrass)	, [12,10]);
-ds_map_add(neighboursToTile, string(TileType.Water)			+string(TileType.PavedGrass)	+string(TileType.PavedGrass)	+string(TileType.PavedGrass)	, [13,10]);
-ds_map_add(neighboursToTile, string(TileType.PavedGrass)	+string(TileType.PavedGrass)	+string(TileType.PavedGrass)	+string(TileType.PavedGrass)	, [14,10]);
-ds_map_add(neighboursToTile, string(TileType.PavedGrass)	+string(TileType.PavedGrass)	+string(TileType.PavedGrass)	+string(TileType.Water)			, [15,10]);
-ds_map_add(neighboursToTile, string(TileType.Water)			+string(TileType.PavedGrass)	+string(TileType.Water)			+string(TileType.Water)			, [12,11]);
-ds_map_add(neighboursToTile, string(TileType.PavedGrass)	+string(TileType.PavedGrass)	+string(TileType.Water)			+string(TileType.Water)			, [13,11]);
-ds_map_add(neighboursToTile, string(TileType.PavedGrass)	+string(TileType.PavedGrass)	+string(TileType.Water)			+string(TileType.PavedGrass)	, [14,11]);
-ds_map_add(neighboursToTile, string(TileType.PavedGrass)	+string(TileType.Water)			+string(TileType.PavedGrass)	+string(TileType.Water)			, [15,11]);
+map_add(WATER,WATER,WATER,WATER,12,8);
+map_add(WATER,WATER,WATER,PAVED,13,8);
+map_add(WATER,PAVED,PAVED,WATER,14,8);
+map_add(PAVED,WATER,WATER,WATER,15,8);
+map_add(WATER,WATER,PAVED,WATER,12,9);
+map_add(WATER,PAVED,WATER,PAVED,13,9);
+map_add(PAVED,WATER,PAVED,PAVED,14,9);
+map_add(WATER,WATER,PAVED,PAVED,15,9);
+map_add(PAVED,WATER,WATER,PAVED,12,10);
+map_add(WATER,PAVED,PAVED,PAVED,13,10);
+map_add(PAVED,PAVED,PAVED,PAVED,14,10);
+map_add(PAVED,PAVED,PAVED,WATER,15,10);
+map_add(WATER,PAVED,WATER,WATER,12,11);
+map_add(PAVED,PAVED,WATER,WATER,13,11);
+map_add(PAVED,PAVED,WATER,PAVED,14,11);
+map_add(PAVED,WATER,PAVED,WATER,15,11);
 //water+none
 //ds_map_add(neighboursToTile, string(TileType.None)	+string(TileType.None)	+string(TileType.None)	+string(TileType.None)	, [0,12]);
-ds_map_add(neighboursToTile, string(TileType.None)	+string(TileType.None)	+string(TileType.None)	+string(TileType.Water)	, [1,12]);
-ds_map_add(neighboursToTile, string(TileType.None)	+string(TileType.Water)	+string(TileType.Water)	+string(TileType.None)	, [2,12]);
-ds_map_add(neighboursToTile, string(TileType.Water)	+string(TileType.None)	+string(TileType.None)	+string(TileType.None)	, [3,12]);
-ds_map_add(neighboursToTile, string(TileType.None)	+string(TileType.None)	+string(TileType.Water)	+string(TileType.None)	, [0,13]);
-ds_map_add(neighboursToTile, string(TileType.None)	+string(TileType.Water)	+string(TileType.None)	+string(TileType.Water)	, [1,13]);
-ds_map_add(neighboursToTile, string(TileType.Water)	+string(TileType.None)	+string(TileType.Water)	+string(TileType.Water)	, [2,13]);
-ds_map_add(neighboursToTile, string(TileType.None)	+string(TileType.None)	+string(TileType.Water)	+string(TileType.Water)	, [3,13]);
-ds_map_add(neighboursToTile, string(TileType.Water)	+string(TileType.None)	+string(TileType.None)	+string(TileType.Water)	, [0,14]);
-ds_map_add(neighboursToTile, string(TileType.None)	+string(TileType.Water)	+string(TileType.Water)	+string(TileType.Water)	, [1,14]);
-ds_map_add(neighboursToTile, string(TileType.Water)	+string(TileType.Water)	+string(TileType.Water)	+string(TileType.Water)	, [2,14]);
-ds_map_add(neighboursToTile, string(TileType.Water)	+string(TileType.Water)	+string(TileType.Water)	+string(TileType.None)	, [3,14]);
-ds_map_add(neighboursToTile, string(TileType.None)	+string(TileType.Water)	+string(TileType.None)	+string(TileType.None)	, [0,15]);
-ds_map_add(neighboursToTile, string(TileType.Water)	+string(TileType.Water)	+string(TileType.None)	+string(TileType.None)	, [1,15]);
-ds_map_add(neighboursToTile, string(TileType.Water)	+string(TileType.Water)	+string(TileType.None)	+string(TileType.Water)	, [2,15]);
-ds_map_add(neighboursToTile, string(TileType.Water)	+string(TileType.None)	+string(TileType.Water)	+string(TileType.None)	, [3,15]);
+map_add(NONE,NONE,NONE,WATER,1,12);
+map_add(NONE,WATER,WATER,NONE,2,12);
+map_add(WATER,NONE,NONE,NONE,3,12);
+map_add(NONE,NONE,WATER,NONE,0,13);
+map_add(NONE,WATER,NONE,WATER,1,13);
+map_add(WATER,NONE,WATER,WATER,2,13);
+map_add(NONE,NONE,WATER,WATER,3,13);
+map_add(WATER,NONE,NONE,WATER,0,14);
+map_add(NONE,WATER,WATER,WATER,1,14);
+map_add(WATER,WATER,WATER,WATER,2,14);
+map_add(WATER,WATER,WATER,NONE,3,14);
+map_add(NONE,WATER,NONE,NONE,0,15);
+map_add(WATER,WATER,NONE,NONE,1,15);
+map_add(WATER,WATER,NONE,WATER,2,15);
+map_add(WATER,NONE,WATER,NONE,3,15);
+
+
+
+//2 WATER (64 tiles)
+map_add(WATER,GRASS,DIRT,WATER,0,16);
+map_add(GRASS,WATER,WATER,DIRT,1,16);
+map_add(WATER,WATER,DIRT,GRASS,2,16);
+map_add(WATER,WATER,GRASS,DIRT,3,16);
+
+map_add(DIRT,WATER,WATER,GRASS,0,17);
+map_add(WATER,DIRT,GRASS,WATER,1,17);
+map_add(DIRT,GRASS,WATER,WATER,2,17);
+map_add(GRASS,DIRT,WATER,WATER,3,17);
+
+map_add(DIRT,WATER,GRASS,WATER,2,18);
+map_add(WATER,DIRT,WATER,GRASS,3,18);
+
+map_add(GRASS,WATER,DIRT,WATER,2,19);
+map_add(WATER,GRASS,WATER,DIRT,3,19);
+
+
+
+map_add(WATER,PAVED,DIRT,WATER,0,20);
+map_add(PAVED,WATER,WATER,DIRT,1,20);
+map_add(WATER,WATER,DIRT,PAVED,2,20);
+map_add(WATER,WATER,PAVED,DIRT,3,20);
+
+map_add(DIRT,WATER,WATER,PAVED,0,21);
+map_add(WATER,DIRT,PAVED,WATER,1,21);
+map_add(DIRT,PAVED,WATER,WATER,2,21);
+map_add(PAVED,DIRT,WATER,WATER,3,21);
+
+map_add(DIRT,WATER,PAVED,WATER,2,22);
+map_add(WATER,DIRT,WATER,PAVED,3,22);
+
+map_add(PAVED,WATER,DIRT,WATER,2,23);
+map_add(WATER,PAVED,WATER,DIRT,3,23);
+
+
+
+map_add(WATER,PAVED,GRASS,WATER,0,24);
+map_add(PAVED,WATER,WATER,GRASS,1,24);
+map_add(WATER,WATER,GRASS,PAVED,2,24);
+map_add(WATER,WATER,PAVED,GRASS,3,24);
+
+map_add(GRASS,WATER,WATER,PAVED,0,25);
+map_add(WATER,GRASS,PAVED,WATER,1,25);
+map_add(GRASS,PAVED,WATER,WATER,2,25);
+map_add(PAVED,GRASS,WATER,WATER,3,25);
+
+map_add(GRASS,WATER,PAVED,WATER,2,26);
+map_add(WATER,GRASS,WATER,PAVED,3,26);
+
+map_add(PAVED,WATER,GRASS,WATER,2,27);
+map_add(WATER,PAVED,WATER,GRASS,3,27);
+
+//2 DIRT (64 tiles)
+map_add(DIRT,GRASS,WATER,DIRT,4,16);
+map_add(GRASS,DIRT,DIRT,WATER,5,16);
+map_add(DIRT,DIRT,WATER,GRASS,6,16);
+map_add(DIRT,DIRT,GRASS,WATER,7,16);
+
+map_add(WATER,DIRT,DIRT,GRASS,4,17);
+map_add(DIRT,WATER,GRASS,DIRT,5,17);
+map_add(WATER,GRASS,DIRT,DIRT,6,17);
+map_add(GRASS,WATER,DIRT,DIRT,7,17);
+
+map_add(WATER,DIRT,GRASS,DIRT,6,18);
+map_add(DIRT,WATER,DIRT,GRASS,7,18);
+
+map_add(GRASS,DIRT,WATER,DIRT,6,19);
+map_add(DIRT,GRASS,DIRT,WATER,7,19);
+
+
+
+map_add(DIRT,GRASS,PAVED,DIRT,4,20);
+map_add(GRASS,DIRT,DIRT,PAVED,5,20);
+map_add(DIRT,DIRT,PAVED,GRASS,6,20);
+map_add(DIRT,DIRT,GRASS,PAVED,7,20);
+
+map_add(PAVED,DIRT,DIRT,GRASS,4,21);
+map_add(DIRT,PAVED,GRASS,DIRT,5,21);
+map_add(PAVED,GRASS,DIRT,DIRT,6,21);
+map_add(GRASS,PAVED,DIRT,DIRT,7,21);
+
+map_add(PAVED,DIRT,GRASS,DIRT,6,22);
+map_add(DIRT,PAVED,DIRT,GRASS,7,22);
+
+map_add(GRASS,DIRT,PAVED,DIRT,6,23);
+map_add(DIRT,GRASS,DIRT,PAVED,7,23);
+
+
+
+map_add(DIRT,WATER,PAVED,DIRT,4,24);
+map_add(WATER,DIRT,DIRT,PAVED,5,24);
+map_add(DIRT,DIRT,PAVED,WATER,6,24);
+map_add(DIRT,DIRT,WATER,PAVED,7,24);
+
+map_add(PAVED,DIRT,DIRT,WATER,4,25);
+map_add(DIRT,PAVED,WATER,DIRT,5,25);
+map_add(PAVED,WATER,DIRT,DIRT,6,25);
+map_add(WATER,PAVED,DIRT,DIRT,7,25);
+
+map_add(PAVED,DIRT,WATER,DIRT,6,26);
+map_add(DIRT,PAVED,DIRT,WATER,7,26);
+
+map_add(WATER,DIRT,PAVED,DIRT,6,27);
+map_add(DIRT,WATER,DIRT,PAVED,7,27);
+
+//2 GRASS (64 tiles)
+map_add(GRASS,WATER,DIRT,GRASS,8,16);
+map_add(WATER,GRASS,GRASS,DIRT,9,16);
+map_add(GRASS,GRASS,DIRT,WATER,10,16);
+map_add(GRASS,GRASS,WATER,DIRT,11,16);
+
+map_add(DIRT,GRASS,GRASS,WATER,8,17);
+map_add(GRASS,DIRT,WATER,GRASS,9,17);
+map_add(DIRT,WATER,GRASS,GRASS,10,17);
+map_add(WATER,DIRT,GRASS,GRASS,11,17);
+
+map_add(DIRT,GRASS,WATER,GRASS,10,18);
+map_add(GRASS,DIRT,GRASS,WATER,11,18);
+
+map_add(WATER,GRASS,DIRT,GRASS,10,19);
+map_add(GRASS,WATER,GRASS,DIRT,11,19);
+
+
+
+map_add(GRASS,PAVED,DIRT,GRASS,8,20);
+map_add(PAVED,GRASS,GRASS,DIRT,9,20);
+map_add(GRASS,GRASS,DIRT,PAVED,10,20);
+map_add(GRASS,GRASS,PAVED,DIRT,11,20);
+
+map_add(DIRT,GRASS,GRASS,PAVED,8,21);
+map_add(GRASS,DIRT,PAVED,GRASS,9,21);
+map_add(DIRT,PAVED,GRASS,GRASS,10,21);
+map_add(PAVED,DIRT,GRASS,GRASS,11,21);
+
+map_add(DIRT,GRASS,PAVED,GRASS,10,22);
+map_add(GRASS,DIRT,GRASS,PAVED,11,22);
+
+map_add(PAVED,GRASS,DIRT,GRASS,10,23);
+map_add(GRASS,PAVED,GRASS,DIRT,11,23);
+
+
+
+map_add(GRASS,PAVED,WATER,GRASS,8,24);
+map_add(PAVED,GRASS,GRASS,WATER,9,24);
+map_add(GRASS,GRASS,WATER,PAVED,10,24);
+map_add(GRASS,GRASS,PAVED,WATER,11,24);
+
+map_add(WATER,GRASS,GRASS,PAVED,8,25);
+map_add(GRASS,WATER,PAVED,GRASS,9,25);
+map_add(WATER,PAVED,GRASS,GRASS,10,25);
+map_add(PAVED,WATER,GRASS,GRASS,11,25);
+
+map_add(WATER,GRASS,PAVED,GRASS,10,26);
+map_add(GRASS,WATER,GRASS,PAVED,11,26);
+
+map_add(PAVED,GRASS,WATER,GRASS,10,27);
+map_add(GRASS,PAVED,GRASS,WATER,11,27);
+
+//2 PAVED (64 tiles)
+map_add(PAVED,GRASS,DIRT,PAVED,12,16);
+map_add(GRASS,PAVED,PAVED,DIRT,13,16);
+map_add(PAVED,PAVED,DIRT,GRASS,14,16);
+map_add(PAVED,PAVED,GRASS,DIRT,15,16);
+
+map_add(DIRT,PAVED,PAVED,GRASS,12,17);
+map_add(PAVED,DIRT,GRASS,PAVED,13,17);
+map_add(DIRT,GRASS,PAVED,PAVED,14,17);
+map_add(GRASS,DIRT,PAVED,PAVED,15,17);
+
+map_add(DIRT,PAVED,GRASS,PAVED,14,18);
+map_add(PAVED,DIRT,PAVED,GRASS,15,18);
+
+map_add(GRASS,PAVED,DIRT,PAVED,14,19);
+map_add(PAVED,GRASS,PAVED,DIRT,15,19);
+
+
+
+map_add(PAVED,WATER,DIRT,PAVED,12,20);
+map_add(WATER,PAVED,PAVED,DIRT,13,20);
+map_add(PAVED,PAVED,DIRT,WATER,14,20);
+map_add(PAVED,PAVED,WATER,DIRT,15,20);
+
+map_add(DIRT,PAVED,PAVED,WATER,12,21);
+map_add(PAVED,DIRT,WATER,PAVED,13,21);
+map_add(DIRT,WATER,PAVED,PAVED,14,21);
+map_add(WATER,DIRT,PAVED,PAVED,15,21);
+
+map_add(DIRT,PAVED,WATER,PAVED,14,22);
+map_add(PAVED,DIRT,PAVED,WATER,15,22);
+
+map_add(WATER,PAVED,DIRT,PAVED,14,23);
+map_add(PAVED,WATER,PAVED,DIRT,15,23);
+
+
+
+map_add(PAVED,WATER,GRASS,PAVED,12,24);
+map_add(WATER,PAVED,PAVED,GRASS,13,24);
+map_add(PAVED,PAVED,GRASS,WATER,14,24);
+map_add(PAVED,PAVED,WATER,GRASS,15,24);
+
+map_add(GRASS,PAVED,PAVED,WATER,12,25);
+map_add(PAVED,GRASS,WATER,PAVED,13,25);
+map_add(GRASS,WATER,PAVED,PAVED,14,25);
+map_add(WATER,GRASS,PAVED,PAVED,15,25);
+
+map_add(GRASS,PAVED,WATER,PAVED,14,26);
+map_add(PAVED,GRASS,PAVED,WATER,15,26);
+
+map_add(WATER,PAVED,GRASS,PAVED,14,27);
+map_add(PAVED,WATER,PAVED,GRASS,15,27);
+
+
+//4 COMBINED (24 tiles)
+//first input grass
+map_add(GRASS,PAVED,DIRT,WATER,0,28);
+map_add(GRASS,PAVED,WATER,DIRT,1,28);
+map_add(GRASS,DIRT,PAVED,WATER,2,28);
+map_add(GRASS,WATER,PAVED,DIRT,3,28);
+map_add(GRASS,DIRT,WATER,PAVED,4,28);
+map_add(GRASS,WATER,DIRT,PAVED,5,28);
+//second input grass
+map_add(PAVED,GRASS,DIRT,WATER,0,29);
+map_add(PAVED,GRASS,WATER,DIRT,1,29);
+map_add(DIRT,GRASS,PAVED,WATER,2,29);
+map_add(WATER,GRASS,PAVED,DIRT,3,29);
+map_add(DIRT,GRASS,WATER,PAVED,4,29);
+map_add(WATER,GRASS,DIRT,PAVED,5,29);
+//third input grass
+map_add(PAVED,DIRT,GRASS,WATER,0,30);
+map_add(PAVED,WATER,GRASS,DIRT,1,30);
+map_add(DIRT,PAVED,GRASS,WATER,2,30);
+map_add(WATER,PAVED,GRASS,DIRT,3,30);
+map_add(DIRT,WATER,GRASS,PAVED,4,30);
+map_add(WATER,DIRT,GRASS,PAVED,5,30);
+//fourth input grass
+map_add(PAVED,DIRT,WATER,GRASS,0,31);
+map_add(PAVED,WATER,DIRT,GRASS,1,31);
+map_add(DIRT,PAVED,WATER,GRASS,2,31);
+map_add(WATER,PAVED,DIRT,GRASS,3,31);
+map_add(DIRT,WATER,PAVED,GRASS,4,31);
+map_add(WATER,DIRT,PAVED,GRASS,5,31);

@@ -10,4 +10,4 @@ Features a fallback system that draws quarter tiles in case the required tile do
 
 
 Feel free to contact me at goktanbaris@gmail.com
-in case you have any feedback or questions.
+in case you have any feedback or questions..
